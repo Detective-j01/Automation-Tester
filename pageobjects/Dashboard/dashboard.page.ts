@@ -114,7 +114,8 @@ export const SELECTORS = {
     folderName: `android=${'new UiSelector().resourceId("text-input-flat").instance(1)'}`,
     //android.widget.EditText[@resource-id="text-input-flat"])[2]
     createFolderBtn: `android=${'new UiSelector().description("CREATE")'}`,
-    uploadBtn: `android=${'new UiSelector().description("UPLOAD")'}`,
+    uploadBtn: '//android.widget.Button[@content-desc="UPLOAD"]',
+    //`android=${'new UiSelector().description("UPLOAD")'}`,
     uploadDescriptionBtn:
       '//android.widget.EditText[@resource-id="text-input-flat" and @text="Description"]',
     //`android${'new UiSelector().text("Description")'}`
@@ -187,16 +188,22 @@ export const SELECTORS = {
     updateEntryBtn: `android=${'new UiSelector().description("Update Entry")'}`,
     directoryUpdatedMsg: `android=${'new UiSelector().description("directory updated successfully")'}`,
     phoneStorageMenu: `android=${'new UiSelector().description("Show roots")'}`,
-    internalStorage: `android=${'new UiSelector().className("android.widget.LinearLayout").instance(34)'}`,
-    searchDocumentBtn: `android=${'new UiSelector().resourceId("com.google.android.documentsui:id/option_menu_search")'}`,
+    internalStorage: `android=${'new UiSelector().className("android.widget.LinearLayout").instance(20)'}`,
+    //new UiSelector().resourceId("android:id/icon").instance(3)
+    //(//android.widget.ImageView[@resource-id="android:id/icon"])[4]
+    searchDocumentBtn: `android=${'new UiSelector().className("androidx.cardview.widget.CardView").instance(5)'}`,
+    // new UiSelector().className("android.widget.LinearLayout").instance(9)
     searchDocument: ` android=${'new UiSelector().resourceId("com.google.android.documentsui:id/search_src_text")'}`,
     pdfFilePicker: `android=${'new UiSelector().description("Upload PDF File Here")'}`,
-    selectPdfFile: `android=${'new UiSelector().className("android.widget.LinearLayout").instance(10)'}`,
+    selectPdfFile: `android=${'new UiSelector().resourceId("com.google.android.documentsui:id/item_root").instance(0)'}`,
+    //new UiSelector().resourceId("com.google.android.documentsui:id/item_root").instance(0)
+    //new UiSelector().className("android.view.View").instance(0)
+    //`android=${'new UiSelector().className("android.widget.LinearLayout").instance(10)'}`,
     documentTab: `android=${'new UiSelector().text("Documents")'}`,
     documents: `android=${'new UiSelector().className("android.widget.LinearLayout").instance(10)'}`,
     activeTasksBtn: `android=${'new UiSelector().description("Tasks")'}`,
     activeCreateTasksBtn: `android=${'new UiSelector().description("Create Task")'}`,
-    statusDropdown: `android=${'new UiSelector().className("android.widget.ImageView").instance(1)'}`,
+    statusDropdown: `android=${'new UiSelector().className("android.view.ViewGroup").instance(20)'}`,
     selectInProgress: `android=${'new UiSelector().description("In Progress")'}`,
     selectCompleted: `android=${'new UiSelector().description("Completed")'}`,
     selectBlocked: `android=${'new UiSelector().description("Blocked")'}`,
@@ -240,6 +247,10 @@ export const SELECTORS = {
     taskDateBtn: `android=${'new UiSelector().description("typeInDate")'}`,
     createTaskBtn: `android=${'new UiSelector().description("Create Task")'}`,
     taskCreatedMsg: `android=${'new UiSelector().description("Task created successfully")'}`,
+    taskUpdatedMsg: `android=${'new UiSelector().description("Task updated successfully")'}`,
+    activetaskTitle: `android=${'new UiSelector().resourceId("text-input-flat").instance(0)'}`,
+    activetaskDescription: `android=${'new UiSelector().resourceId("text-input-flat").instance(1)'}`,
+    activeTask: `android=${'new UiSelector().className("android.view.ViewGroup").instance(11)'}`,
   },
 
   //   IOS: {},
@@ -1091,6 +1102,7 @@ class DashboardPage extends Page {
       await this.getPDFFilePicker();
       await this.getPhoneStorageMenu();
       await this.getPhoneInternalStorage();
+      await browser.pause(1000);
       await this.getSearchDocumentBtn();
       await this.searchUploadedDocument(fileName);
       await browser.pause(3000);
@@ -1112,6 +1124,12 @@ class DashboardPage extends Page {
     return driver.isAndroid
       ? (await this.clickElement(SELECTORS.ANDROID.statusDropdown),
         await this.clickElement(SELECTORS.ANDROID.selectToDo))
+      : driver.isIOS;
+  }
+  public async selectActiveStatusInProgress() {
+    return driver.isAndroid
+      ? (await this.clickElement(SELECTORS.ANDROID.statusDropdown),
+        await this.clickElement(SELECTORS.ANDROID.selectInProgress))
       : driver.isIOS;
   }
   public async getActiveTaskStartDatePopUp() {
@@ -1268,6 +1286,57 @@ class DashboardPage extends Page {
     return driver.isAndroid
       ? await this.getElementText(SELECTORS.ANDROID.taskCreatedMsg)
       : driver.isIOS;
+  }
+  public async getActiveTaskUpdatedMsg() {
+    return driver.isAndroid
+      ? await this.getElementText(SELECTORS.ANDROID.taskUpdatedMsg)
+      : driver.isIOS;
+  }
+  public async inputActiveTitle(title: string) {
+    return driver.isAndroid
+      ? await this.setElementInputValue(
+          SELECTORS.ANDROID.activetaskTitle,
+          title
+        )
+      : driver.isIOS;
+  }
+
+  public async inputActiveDescription(description: string) {
+    return driver.isAndroid
+      ? await this.setElementInputValue(
+          SELECTORS.ANDROID.activetaskDescription,
+          description
+        )
+      : driver.isIOS;
+  }
+  public async isActiveTaskVisible() {
+    await browser.pause(1000);
+    const activeProject = await driver.$(SELECTORS.ANDROID.activeTask);
+    const isVisible = await activeProject.isDisplayed();
+    console.log(`Active Task visible: ${isVisible}`);
+    return isVisible;
+  }
+  public async scrollAndClickActiveTask() {
+    const scrollableSelector =
+      "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(" +
+      'new UiSelector().className("android.view.ViewGroup").instance(11));';
+    const activeProject = await driver.$(`android=${scrollableSelector}`);
+    await activeProject.waitForDisplayed({ timeout: 5000 });
+    await activeProject.click();
+  }
+  public async getActiveUpdateTaskBtn() {
+    return driver.isAndroid
+      ? await (async () => {
+          // Scroll to the Add User button
+          const scrollableSelector =
+            "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(" +
+            'new UiSelector().description("Update Task")';
+          await driver.$(`android=${scrollableSelector}`);
+
+          // Click the Add User button
+          return this.clickElement(SELECTORS.ANDROID.createTaskBtn);
+        })()
+      : driver.isIOS; // Add iOS logic here if needed
   }
 }
 

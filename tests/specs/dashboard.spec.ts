@@ -828,6 +828,7 @@ describe("My Login application", () => {
   // });
   it("Active Project Cases: Uploading Document", async () => {
     await loginNewUser(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+    await browser.pause(1000);
     expect(await DashboardPage.getProgressBar()).toBeDisplayed();
     await browser.pause(8000);
     await DashboardPage.isActiveProjectVisible();
@@ -838,13 +839,14 @@ describe("My Login application", () => {
     await browser.pause(8000);
     await DashboardPage.getDocumentTab();
     await browser.pause(2000);
-    await DashboardPage.getUploadBtn();
     await DashboardPage.uploadRandomPdfFile();
+    await DashboardPage.getUploadBtn();
     await browser.pause(2000);
     // await scrollElement();
   });
   it("Active Project Cases: Adding a Task in Active Dashboard", async () => {
     await loginNewUser(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+    await browser.pause(1000);
     expect(await DashboardPage.getProgressBar()).toBeDisplayed();
     await browser.pause(8000);
     await DashboardPage.isActiveProjectVisible();
@@ -853,6 +855,12 @@ describe("My Login application", () => {
     await browser.pause(8000);
     expect(await DashboardPage.getProgressBar()).toBeDisplayed();
     await browser.pause(8000);
+    await DashboardPage.getActiveTasksBtn();
+    await DashboardPage.getActiveCreateTaskBtn();
+    const initialTitleName = await getRandomName(5);
+    await DashboardPage.inputActiveTitle(initialTitleName);
+    const initialDescription = await getRandomName(15);
+    await DashboardPage.inputActiveDescription(initialDescription);
     await DashboardPage.selectActiveStatusToDo();
     await DashboardPage.getActiveTaskStartDatePopUp();
     await DashboardPage.getActiveTaskStartDateBtn();
@@ -882,6 +890,45 @@ describe("My Login application", () => {
     await DashboardPage.getActiveCreateTaskBtn();
     expect(await DashboardPage.getActiveTaskCreatedMsg()).toHaveText(
       "Task created successfully"
+    );
+  });
+  it("Active Project Cases: Updating a created task with Name, Description, Status, Label & Checklist", async () => {
+    await loginNewUser(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+    await browser.pause(1000);
+    expect(await DashboardPage.getProgressBar()).toBeDisplayed();
+    await browser.pause(8000);
+    await DashboardPage.isActiveProjectVisible();
+    await browser.pause(8000);
+    await DashboardPage.scrollAndClickActiveProject();
+    await browser.pause(8000);
+    expect(await DashboardPage.getProgressBar()).toBeDisplayed();
+    await browser.pause(8000);
+    await DashboardPage.getActiveTasksBtn();
+    expect(await DashboardPage.getProgressBar()).toBeDisplayed();
+    await browser.pause(8000);
+    await DashboardPage.isActiveTaskVisible();
+    await browser.pause(8000);
+    await DashboardPage.scrollAndClickActiveTask();
+    await browser.pause(8000);
+    const initialTitleName = await getRandomName(5);
+    await DashboardPage.inputActiveTitle(initialTitleName);
+    const initialDescription = await getRandomName(15);
+    await DashboardPage.inputActiveTitle(initialDescription);
+    await DashboardPage.selectActiveStatusInProgress();
+    await scrollElement();
+    await DashboardPage.clickActiveLabelDropdown();
+    const initialLabelName = await getRandomName(5);
+    await DashboardPage.inputActiveLabel(initialLabelName);
+    await DashboardPage.getActiveAddLabelBtn();
+    const expectedLabel = await DashboardPage.verifyActiveLabel(
+      initialLabelName
+    );
+    expect(initialLabelName).toBe(expectedLabel);
+    await DashboardPage.getActiveLabelDoneBtn();
+    await DashboardPage.addActiveChecklist("Checking");
+    await DashboardPage.getActiveCreateTaskBtn();
+    expect(await DashboardPage.getActiveTaskUpdatedMsg()).toHaveText(
+      "Task updated successfully"
     );
   });
 });

@@ -1,3 +1,5 @@
 ./apps
 node_modules
 
+report/allure-report/
+report/allure-results/
