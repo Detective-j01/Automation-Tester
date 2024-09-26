@@ -1,3 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","63732","Should Create a new task with Status (To Do)","","Mon Sep 09 20:19:45 PKT 2024","passed","Mon Sep 09 20:20:49 PKT 2024","","Task management functionality","",""
-"","59521","Filter Case, Select project for Task , Search Title , Status(Any) , Label & Assignee","","Mon Sep 09 20:20:49 PKT 2024","passed","Mon Sep 09 20:21:48 PKT 2024","","Task management functionality","",""
