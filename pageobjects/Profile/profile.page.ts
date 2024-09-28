@@ -9,10 +9,15 @@ const SELECTORS = {
     professionDropDown: `android=${'new UiSelector().className("android.widget.ImageView").instance(0)'}`,
     builder: `android=${'new UiSelector().description("Builder")'}`,
     BodyAssociatedDropDown: `android=${'new UiSelector().className("android.widget.ImageView").instance(1)'}`,
-    selectSACSSP: `android=${'new UiSelector().description("Builder")'}`,
+    selectSACSSP: `android=${'new UiSelector().description("SACSSP")'}`,
+    selectSACE: `android=${'new UiSelector().description("SACE")'}`,
+    selectLSSA: `android=${'new UiSelector().description("LSSA")'}`,
+    selectECSA: `android=${'new UiSelector().description("ECSA")'}`,
     ProfessionalBodyRegisterNumber: `android=${'new UiSelector().resourceId("text-input-flat").instance(2)'}`,
     updateBtn: `android=${'new UiSelector().resourceId("button")'}`,
     companyName: `android=${'new UiSelector().resourceId("text-input-flat").instance(3)'}`,
+    progressBar: `android=${'new UiSelector().className("android.widget.FrameLayout").instance(5)'}`,
+    profileUpdateMsg: `android=${'new UiSelector().description(""'}`,
   },
 };
 
@@ -22,7 +27,11 @@ class ProfilePage extends Page {
       ? await this.clickElement(SELECTORS.ANDROID.profileIcon)
       : driver.isIOS;
   }
-
+  public async getProgressBar() {
+    return driver.isAndroid
+      ? await this.getElement(SELECTORS.ANDROID.progressBar)
+      : driver.isIOS;
+  }
   public async getProfileBtn() {
     return driver.isAndroid
       ? await this.clickElement(SELECTORS.ANDROID.profileBtn)
@@ -50,10 +59,28 @@ class ProfilePage extends Page {
       await this.clickElement(SELECTORS.ANDROID.builder);
     }
   }
-  public async selectProfileBodyAssociationDropdown() {
+  public async selectProfileBodyAssociationSACSSP() {
     if (driver.isAndroid) {
       await this.clickElement(SELECTORS.ANDROID.BodyAssociatedDropDown);
       await this.clickElement(SELECTORS.ANDROID.selectSACSSP);
+    }
+  }
+  public async selectProfileBodyAssociationLSSA() {
+    if (driver.isAndroid) {
+      await this.clickElement(SELECTORS.ANDROID.BodyAssociatedDropDown);
+      await this.clickElement(SELECTORS.ANDROID.selectLSSA);
+    }
+  }
+  public async selectProfileBodyAssociationSACE() {
+    if (driver.isAndroid) {
+      await this.clickElement(SELECTORS.ANDROID.BodyAssociatedDropDown);
+      await this.clickElement(SELECTORS.ANDROID.selectSACE);
+    }
+  }
+  public async selectProfileBodyAssociatioNECSA() {
+    if (driver.isAndroid) {
+      await this.clickElement(SELECTORS.ANDROID.BodyAssociatedDropDown);
+      await this.clickElement(SELECTORS.ANDROID.selectECSA);
     }
   }
   public async getProfessionalBodyRegisterNumber(RegisterNumber: string) {
@@ -75,6 +102,11 @@ class ProfilePage extends Page {
   public async getProfileUpdateBtn() {
     return driver.isAndroid
       ? await this.clickElement(SELECTORS.ANDROID.updateBtn)
+      : driver.isIOS;
+  }
+  public async getProfileUpdateMsg() {
+    return driver.isAndroid
+      ? await this.getElementText(SELECTORS.ANDROID.profileUpdateMsg)
       : driver.isIOS;
   }
 }

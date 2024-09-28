@@ -12,7 +12,7 @@ export const config: WebdriverIO.Config = {
   // Appium
   // ======
   //
-  specs: ["../tests/specs/dashboard.spec.ts"],
+  specs: ["../tests/specs/support.spec.ts"],
   // specs: ["../tests/specs/*.ts"], For running all test cases
   services: [
     ...(baseConfig.services || []),

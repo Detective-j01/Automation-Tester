@@ -6,9 +6,42 @@ describe("Settings functionality", () => {
     await browser.reloadSession();
   });
 
-  it("Should Create a new task with Status (To Do)", async () => {
+  it("Should Update Settings with Email/Push", async () => {
     await loginNewUser(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
     await browser.pause(1000);
-    await ProfilePage.clickEmailSiteInstructionUpdates();
+    await ProfilePage.getProfileIconBtn();
+    await browser.pause(1000);
+    await ProfilePage.getSettingBtn();
+    await browser.pause(4000);
+    await ProfilePage.clickSiteUpdatesEmail();
+    await browser.pause(2000);
+    expect(await ProfilePage.getProgressBar()).toBeDisplayed();
+    expect(await ProfilePage.getNotificationPreferenceMsg()).toHaveText(
+      "Notification preference updated"
+    );
+    await ProfilePage.clickTaskUpdatesPush();
+    await browser.pause(2000);
+    expect(await ProfilePage.getProgressBar()).toBeDisplayed();
+    expect(await ProfilePage.getNotificationPreferenceMsg()).toHaveText(
+      "Notification preference updated"
+    );
+    await ProfilePage.clickDrawingsUpdatesEmail();
+    await browser.pause(2000);
+    expect(await ProfilePage.getProgressBar()).toBeDisplayed();
+    expect(await ProfilePage.getNotificationPreferenceMsg()).toHaveText(
+      "Notification preference updated"
+    );
+    await ProfilePage.clickDocumentsUpdatesPush();
+    await browser.pause(2000);
+    expect(await ProfilePage.getProgressBar()).toBeDisplayed();
+    expect(await ProfilePage.getNotificationPreferenceMsg()).toHaveText(
+      "Notification preference updated"
+    );
+    await ProfilePage.clickProjectMemberUpdatesEmail();
+    await browser.pause(2000);
+    expect(await ProfilePage.getProgressBar()).toBeDisplayed();
+    expect(await ProfilePage.getNotificationPreferenceMsg()).toHaveText(
+      "Notification preference updated"
+    );
   });
 });
