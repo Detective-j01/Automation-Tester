@@ -122,18 +122,21 @@ export const config: Options.Testrunner = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
+
   reporters: [
     "spec",
     [
-      "allure",
+      "html-nice",
       {
-        outputDir: "allure-results",
-        disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: true,
+        outputDir: "./reports/html-nice",
+        reportTitle: "My Test Report",
+        showInBrowser: true, // If you want to automatically open it in a browser after the test
+        useOnAfterCommandForScreenshot: true,
+        linkScreenshots: true,
+        debug: true,
       },
     ],
   ],
-
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
   mochaOpts: {

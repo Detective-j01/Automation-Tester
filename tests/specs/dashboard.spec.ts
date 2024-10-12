@@ -102,9 +102,9 @@ describe("My Login application", () => {
   //   await DashboardPage.selectCurrencyUSD();
   //   await DashboardPage.inputProjectBudget("3000");
   //   await DashboardPage.getCreateProjectBtn();
-  //   expect(await DashboardPage.getProjectCreatedMsg()).toHaveText(
-  //     "Project create successfully"
-  //   );
+ await DashboardPage.getProjectCreatedMsg();
+  
+    );
   // });
   // it("Entering Project Name, SiteAddress, Currency(EUR) and Budget", async () => {
   //   await loginNewUser(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);

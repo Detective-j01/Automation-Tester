@@ -251,6 +251,7 @@ export const SELECTORS = {
     activetaskTitle: `android=${'new UiSelector().resourceId("text-input-flat").instance(0)'}`,
     activetaskDescription: `android=${'new UiSelector().resourceId("text-input-flat").instance(1)'}`,
     activeTask: `android=${'new UiSelector().className("android.view.ViewGroup").instance(11)'}`,
+    projectSuccessDialog1: `android=${'new UiSelector().description("Project create successfully")'}`,
   },
 
   //   IOS: {},
@@ -457,17 +458,17 @@ class DashboardPage extends Page {
       : driver.isIOS;
   }
 
-  public async getProjectCreatedMsg() {
-    if (driver.isAndroid) {
-      await browser.pause(800); // Optional pause
-      return this.getElementText(SELECTORS.ANDROID.projectCreatedMsg);
-    } else if (driver.isIOS) {
-      // iOS-specific logic
-      return;
-      // return this.getElementText(SELECTORS.IOS.projectCreatedMsg);
-    }
-    return undefined;
-  }
+  // public async getProjectCreatedMsg() {
+  //   if (driver.isAndroid) {
+  //     await browser.pause(800); // Optional pause
+  //     return this.getElementText(SELECTORS.ANDROID.projectCreatedMsg);
+  //   } else if (driver.isIOS) {
+  //     // iOS-specific logic
+  //     return;
+  //     // return this.getElementText(SELECTORS.IOS.projectCreatedMsg);
+  //   }
+  //   return undefined;
+  // }
 
   public async getProjectCancelBtn() {
     return driver.isAndroid
@@ -1337,6 +1338,14 @@ class DashboardPage extends Page {
           return this.clickElement(SELECTORS.ANDROID.createTaskBtn);
         })()
       : driver.isIOS; // Add iOS logic here if needed
+  }
+  public async getProjectCreatedMsg() {
+    //
+    const activeProject = await driver.$(
+      SELECTORS.ANDROID.projectSuccessDialog1
+    );
+    const isVisible = await activeProject.isDisplayed();
+    return isVisible;
   }
 }
 

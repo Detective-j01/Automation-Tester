@@ -12,7 +12,8 @@
     "appium": "^1.22.3",
     "appium-uiautomator2-driver": "^2.29.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "wdio-html-nice-reporter": "^8.1.6"
   },
   "scripts": {
     "test:android": "wdio run config/wdio.android.conf.ts",
